@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { subscribeToLatestAttendance, recordCheckIn, isStudentCheckedInToday, findStudentByRfidTag } from '../api/attendance';
 import { subscribeToCourses } from '../api/courses';
+import { subscribeToStudents } from '../api/students';
 import defaultAvatar from '../assets/default-avatar.jpg';
 import profileFemale from '../assets/profile-female.png';
 import profileMale from '../assets/profile-male.png';
 import schoolLogo from '../assets/SCC logo.png';
 import sccBg from '../assets/scc4.png';
-import { subscribeToStudents } from '../api/students';
+
 
 const RfidAttendanceMonitor = () => {
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
