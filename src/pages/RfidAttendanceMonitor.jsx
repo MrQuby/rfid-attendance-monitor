@@ -2,11 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { subscribeToLatestAttendance, recordCheckIn, isStudentCheckedInToday, findStudentByRfidTag } from '../api/attendance';
 import { subscribeToCourses } from '../api/courses';
 import { subscribeToStudents } from '../api/students';
-import defaultAvatar from '../assets/default-avatar.jpg';
 import profileFemale from '../assets/profile-female.png';
 import profileMale from '../assets/profile-male.png';
 import schoolLogo from '../assets/SCC logo.png';
-import sccBg from '../assets/scc4.png';
+import backgroundImage from '../assets/background.png';
 
 
 const RfidAttendanceMonitor = () => {
@@ -331,7 +330,7 @@ const RfidAttendanceMonitor = () => {
       {/* Background Image */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${sccBg})` }}
+        style={{ backgroundImage: `url(${backgroundImage})` }}
       ></div>
       
       {/* Rose overlay */}
@@ -455,13 +454,13 @@ const RfidAttendanceMonitor = () => {
                       <div className="flex flex-col items-center">
                         <div className="w-full h-60 flex items-center justify-center overflow-hidden rounded-lg mb-2">
                           <img 
-                            src={student.profileImageURL || defaultAvatar} 
+                            src={student.profileImageURL || profileFemale} 
                             alt={`${student.firstName || ''} ${student.lastName || ''}`}
                             className="w-full h-full object-fill" 
                             style={{ width: '100%', height: '100%' }}
                             onError={(e) => {
                               e.target.onerror = null;
-                              e.target.src = defaultAvatar;
+                              e.target.src = profileFemale;
                             }}
                           />
                         </div>
@@ -540,11 +539,11 @@ const RfidAttendanceMonitor = () => {
                                 <div className="h-12 w-12 flex-shrink-0 mr-3">
                                   <img 
                                     className="h-12 w-12 rounded-full object-cover border-2 border-gray-200 shadow-sm" 
-                                    src={student.profileImageURL || defaultAvatar} 
+                                    src={student.profileImageURL || profileFemale} 
                                     alt="" 
                                     onError={(e) => {
                                       e.target.onerror = null;
-                                      e.target.src = defaultAvatar;
+                                      e.target.src = profileFemale;
                                     }}
                                   />
                                 </div>
