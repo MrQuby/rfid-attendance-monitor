@@ -555,7 +555,7 @@ const RfidAttendanceMonitor = () => {
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-md inline-block">{getCourseName(student.course) || record.courseId}</div>
+                            <div className="text-sm font-medium bg-blue-100 text-blue-800 px-2 py-1 rounded-full inline-block">{getCourseName(student.course) || record.courseId}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <div className="text-sm text-gray-900 font-medium">{record.date}</div>
