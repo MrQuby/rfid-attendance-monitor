@@ -4,6 +4,7 @@ import { subscribeToCourses } from '../api/courses';
 import { subscribeToStudents } from '../api/students';
 import profileFemale from '../assets/profile-female.png';
 import profileMale from '../assets/profile-male.png';
+import unknownStudent from '../assets/unknown.png';
 import schoolLogo from '../assets/SCC logo.png';
 import backgroundImage from '../assets/background.png';
 
@@ -250,6 +251,21 @@ const RfidAttendanceMonitor = () => {
       if (!student) {
         console.warn('No student found with RFID tag:', rfidTag);
         console.warn('Student not found');
+        
+        // Set invalid student state
+        setCurrentStudent({
+          studentId: 'INVALID',
+          firstName: 'Invalid',
+          lastName: 'Student',
+          status: 'INVALID',
+          profileImageURL: unknownStudent
+        });
+        setIsCheckedIn(false);
+        setLastStatus('INVALID');
+        
+        // No timer to reset the display for invalid students
+        // The invalid student will stay on screen until another scan happens
+        
         setIsProcessing(false);
         return;
       }
@@ -376,12 +392,22 @@ const RfidAttendanceMonitor = () => {
                 />
               </div>
             </div>
-            <div className={`${currentStudent ? (isCheckingOut ? 'bg-red-600' : 'bg-green-600') : 
-                             lastStatus ? (lastStatus === 'OUT' ? 'bg-red-600' : 'bg-green-600') : 
-                             'bg-gray-500'} text-white text-center p-4 font-bold mb-4 rounded-lg shadow transition-all duration-300 flex items-center justify-center`}>
+            <div className={`${currentStudent ? (
+              currentStudent.status === 'INVALID' ? 'bg-yellow-600' : 
+              isCheckingOut ? 'bg-red-600' : 'bg-green-600'
+            ) : 
+            lastStatus ? (
+              lastStatus === 'INVALID' ? 'bg-yellow-600' :
+              lastStatus === 'OUT' ? 'bg-red-600' : 'bg-green-600'
+            ) : 
+            'bg-gray-500'} text-white text-center p-4 font-bold mb-4 rounded-lg shadow transition-all duration-300 flex items-center justify-center`}>
               <span className="mr-2">
                 {currentStudent ? (
-                  isCheckingOut ? (
+                  currentStudent.status === 'INVALID' ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  ) : isCheckingOut ? (
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
@@ -391,7 +417,11 @@ const RfidAttendanceMonitor = () => {
                     </svg>
                   )
                 ) : lastStatus ? (
-                  lastStatus === 'OUT' ? (
+                  lastStatus === 'INVALID' ? (
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  ) : lastStatus === 'OUT' ? (
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                     </svg>
@@ -407,8 +437,14 @@ const RfidAttendanceMonitor = () => {
                 )}
               </span>
               <span className="text-2xl">
-                {currentStudent ? (isCheckingOut ? 'CHECKED OUT' : 'CHECKED IN') : 
-                lastStatus ? (lastStatus === 'OUT' ? 'CHECKED OUT' : 'CHECKED IN') : 
+                {currentStudent ? (
+                  currentStudent.status === 'INVALID' ? 'INVALID STUDENT' :
+                  isCheckingOut ? 'CHECKED OUT' : 'CHECKED IN'
+                ) : 
+                lastStatus ? (
+                  lastStatus === 'INVALID' ? 'INVALID STUDENT' :
+                  lastStatus === 'OUT' ? 'CHECKED OUT' : 'CHECKED IN'
+                ) : 
                 'WAITING'}
               </span>
             </div>
